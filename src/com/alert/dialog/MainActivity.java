@@ -25,18 +25,25 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 	    ArrayList <Integer>MultiChoiceID = new ArrayList <Integer>();
 
 		private Dialog mutilDialog;
-
-		private Button button0;
-
+		private Button mutilBtn;
 		private AlertDialog.Builder builder;
+		private Button listBtn;
+		private Button progressBtn;
 	    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		button0 = (Button) findViewById(R.id.button0);
-        button0.setOnClickListener(this);
+		mutilBtn = (Button) findViewById(R.id.button1);
+		mutilBtn.setOnClickListener(this);
+        
+		listBtn = (Button) findViewById(R.id.button2);
+		listBtn.setOnClickListener(this);
+		
+		progressBtn = (Button) findViewById(R.id.button3);
+		progressBtn.setOnClickListener(this);
+		
         
         
         
@@ -45,31 +52,36 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		
 		
 	
-
+	/**
+	 * 功能：在这里更新进度条
+	 **/
 	@Override
 	public void run() {
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
+		 int Progress = 0;
+		    while(Progress < MAX_PROGRESS) {
+			try {
+			    Thread.sleep(100);
+			    Progress++;  
+			    mProgressDialog.incrementProgressBy(1);
+			} catch (InterruptedException e) {
+			    e.printStackTrace();
+			}
+			 
+		    }
 	}
 	@Override
 	public void onClick(View v) {
 		builder = new AlertDialog.Builder(MainActivity.this);
 		switch (v.getId()) {
-		case R.id.button0:
-			
+		case R.id.button1:			
 			CreateMutilDialog();
-			
-	            
 			break;
-
+		case R.id.button2:			
+			CreateListDialog();
+			break;
+		case R.id.button3:			
+			CreateProgressDialog();
+			break;
 		default:
 			break;
 		}
@@ -78,6 +90,71 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		
 		
 	}
+	/**
+	 * 功能：进度条对话框
+	 **/
+	@SuppressWarnings("deprecation")
+	private void CreateProgressDialog() {
+        mProgressDialog = new ProgressDialog(MainActivity.this);
+        mProgressDialog.setIcon(R.drawable.icon);
+        mProgressDialog.setTitle("进度条窗口");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setMax(MAX_PROGRESS);
+		mProgressDialog.setButton("确定", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this, "这里是确定 ");
+			}
+		});
+		mProgressDialog.setButton2("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this, "这里是取消 ");
+				
+			}
+		});
+		mProgressDialog.show();
+		new Thread(this).start();
+		
+		
+	}
+
+	private final String[] arrayFruit = new String[] { "苹果", "橘子", "草莓", "香蕉" };  
+	
+	/**
+	 * 功能：创建列表对话框
+	 **/
+	private void CreateListDialog() {
+		builder.setIcon(R.drawable.icon);
+		builder.setTitle("你喜欢吃哪种水果？");
+		builder.setItems(arrayFruit, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this, arrayFruit[which]);				
+			}
+		});
+		builder.setNegativeButton("取消",  new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this, "取消了了");				
+			}			
+		});
+		
+		mutilDialog = builder.create();
+		mutilDialog.show();
+		/**
+		 * 功能：设置对话框的尺寸大小
+		 **/
+		WindowManager.LayoutParams params=mutilDialog.getWindow().getAttributes();
+		params.width=300;
+		
+		mutilDialog.getWindow().setAttributes(params);			
+	}
+
 
 
 
@@ -108,7 +185,7 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mutilDialog.dismiss();
-				ToastUtils.disToast(MainActivity.this, "容我再想想!");				
+				ToastUtils.disToast(MainActivity.this, "容朕再想想!");				
 			}
 		});
 		mutilDialog = builder.create();
