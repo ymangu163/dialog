@@ -30,6 +30,7 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		private Button listBtn;
 		private Button progressBtn;
 		private Button radioBtn;
+		private Button ckeckBoxBtn;
 	    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,8 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		radioBtn = (Button) findViewById(R.id.button4);
 		radioBtn.setOnClickListener(this);
 		
+		ckeckBoxBtn = (Button) findViewById(R.id.button5);
+		ckeckBoxBtn.setOnClickListener(this);
         
         
         
@@ -88,6 +91,9 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		case R.id.button4:			
 			CreateRadioListDialog();
 			break;
+		case R.id.button5:			
+			CreateCkeckBoxDialog();
+			break;
 		default:
 			break;
 		}
@@ -98,6 +104,55 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 	}
 	
 	
+	/**
+	 * 功能：CheckBox 列表对话框
+	 **/
+	private void CreateCkeckBoxDialog() {
+		 final boolean[] arrayFruitSelected = new boolean[] {true, true, false, false};  
+		 builder.setMultiChoiceItems(arrayFruit, arrayFruitSelected, new DialogInterface.OnMultiChoiceClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				arrayFruitSelected[which]=isChecked;		
+			}
+		});
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				  StringBuilder stringBuilder = new StringBuilder();  
+				  for (int i = 0; i < arrayFruitSelected.length; i++) {  
+                      if (arrayFruitSelected[i] == true)  
+                      {  
+                          stringBuilder.append(arrayFruit[i] + "、");  
+                      }  
+                  }
+				ToastUtils.disToast(MainActivity.this, stringBuilder.toString());
+			}
+		});
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this,"取消");
+			}
+		});
+		mutilDialog = builder.create();
+		mutilDialog.show();
+		/**
+		 * 功能：设置对话框的尺寸大小
+		 **/
+		WindowManager.LayoutParams params=mutilDialog.getWindow().getAttributes();
+		params.width=300;
+		
+		mutilDialog.getWindow().setAttributes(params);	
+		
+		
+	}
+
+
+
+
 	/**
 	 * 功能：radio 列表对话框
 	 **/
