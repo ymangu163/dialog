@@ -8,10 +8,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends Activity implements Runnable, OnClickListener {
 
@@ -31,6 +33,7 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		private Button progressBtn;
 		private Button radioBtn;
 		private Button ckeckBoxBtn;
+		private Button customBtn;
 	    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,10 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		ckeckBoxBtn = (Button) findViewById(R.id.button5);
 		ckeckBoxBtn.setOnClickListener(this);
         
+		customBtn = (Button) findViewById(R.id.button6);
+		customBtn.setOnClickListener(this);
         
+		inflate = LayoutInflater.from(this);
         
 	}
 	
@@ -91,8 +97,8 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		case R.id.button4:			
 			CreateRadioListDialog();
 			break;
-		case R.id.button5:			
-			CreateCkeckBoxDialog();
+		case R.id.button6:			
+			CreateCustomDialog();
 			break;
 		default:
 			break;
@@ -103,7 +109,46 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		
 	}
 	
+	/**
+	 * 功能：创建自定义的login对话框
+	 **/
+	private void CreateCustomDialog() {
+		final View loginView=inflate.inflate(R.layout.login, null);
+		
+		builder.setIcon(R.drawable.icon);
+		builder.setTitle("用户登录");
+		builder.setView(loginView); //设置成自定义的view
+		builder.setPositiveButton("登录", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				EditText userName=(EditText) loginView.findViewById(R.id.et_name);
+				
+				ToastUtils.disToast(MainActivity.this, userName.getText().toString());
+				
+			}
+		});
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this, "取消了");
+				
+			}
+		});
+		mutilDialog = builder.create();
+		mutilDialog.show();
 	
+		WindowManager.LayoutParams params=mutilDialog.getWindow().getAttributes();
+		params.width=300;
+		params.height=300;
+		mutilDialog.getWindow().setAttributes(params);	
+		
+	}
+
+
+
+
 	/**
 	 * 功能：CheckBox 列表对话框
 	 **/
@@ -230,7 +275,9 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 
 	private final String[] arrayFruit = new String[] { "苹果", "橘子", "草莓", "香蕉" };
 
-	private int selectedFruitIndex;  
+	private int selectedFruitIndex;
+
+	private LayoutInflater inflate;  
 	
 	/**
 	 * 功能：创建列表对话框
