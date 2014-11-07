@@ -34,6 +34,7 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		private Button radioBtn;
 		private Button ckeckBoxBtn;
 		private Button customBtn;
+		private Button readProgressBtn;
 	    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +58,10 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		customBtn = (Button) findViewById(R.id.button6);
 		customBtn.setOnClickListener(this);
         
-		inflate = LayoutInflater.from(this);
+		readProgressBtn = (Button) findViewById(R.id.button7);
+		readProgressBtn.setOnClickListener(this);
         
+		inflate = LayoutInflater.from(this);
 	}
 	
 		
@@ -100,6 +103,9 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		case R.id.button6:			
 			CreateCustomDialog();
 			break;
+		case R.id.button7:			
+			CreateReadProgressDialog();
+			break;
 		default:
 			break;
 		}
@@ -109,6 +115,27 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		
 	}
 	
+	
+	
+	
+	
+	/**
+	 * 功能：创建圆圈进度条对话框
+	 **/
+	private void CreateReadProgressDialog() {
+		mProgressDialog = new ProgressDialog(MainActivity.this);
+	    mProgressDialog.setTitle("读取ing");
+	    mProgressDialog.setMessage("正在读取中请稍候");
+	    mProgressDialog.setIndeterminate(true);
+	    mProgressDialog.setCancelable(true);
+	    mProgressDialog.show();	
+		WindowManager.LayoutParams params=mutilDialog.getWindow().getAttributes();
+		params.width=300;
+		params.height=300;
+		mProgressDialog.getWindow().setAttributes(params);	
+	}
+
+
 	/**
 	 * 功能：创建自定义的login对话框
 	 **/
