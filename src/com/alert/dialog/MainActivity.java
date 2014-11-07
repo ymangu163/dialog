@@ -29,6 +29,7 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		private AlertDialog.Builder builder;
 		private Button listBtn;
 		private Button progressBtn;
+		private Button radioBtn;
 	    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,8 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		
 		progressBtn = (Button) findViewById(R.id.button3);
 		progressBtn.setOnClickListener(this);
+		radioBtn = (Button) findViewById(R.id.button4);
+		radioBtn.setOnClickListener(this);
 		
         
         
@@ -82,6 +85,9 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		case R.id.button3:			
 			CreateProgressDialog();
 			break;
+		case R.id.button4:			
+			CreateRadioListDialog();
+			break;
 		default:
 			break;
 		}
@@ -90,6 +96,52 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		
 		
 	}
+	
+	
+	/**
+	 * 功能：radio 列表对话框
+	 **/
+	private void CreateRadioListDialog() {
+		 selectedFruitIndex = 0;  
+		builder.setSingleChoiceItems(arrayFruit, 0, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				selectedFruitIndex=which;				
+			}
+		});
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this, arrayFruit[selectedFruitIndex]);
+				
+			}
+		});
+		builder.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ToastUtils.disToast(MainActivity.this, "取消了");
+				
+			}
+			
+		});
+		mutilDialog = builder.create();
+		mutilDialog.show();
+		/**
+		 * 功能：设置对话框的尺寸大小
+		 **/
+		WindowManager.LayoutParams params=mutilDialog.getWindow().getAttributes();
+		params.width=300;
+		
+		mutilDialog.getWindow().setAttributes(params);		
+		
+	}
+
+
+
+
 	/**
 	 * 功能：进度条对话框
 	 **/
@@ -121,7 +173,9 @@ public class MainActivity extends Activity implements Runnable, OnClickListener 
 		
 	}
 
-	private final String[] arrayFruit = new String[] { "苹果", "橘子", "草莓", "香蕉" };  
+	private final String[] arrayFruit = new String[] { "苹果", "橘子", "草莓", "香蕉" };
+
+	private int selectedFruitIndex;  
 	
 	/**
 	 * 功能：创建列表对话框
